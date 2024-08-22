@@ -7,7 +7,6 @@ function handle_register(event){
         phone: event.target.phone.value,
         password: event.target.password.value
     }
-    
     // console.log(user_details)
 
     fetch('http://localhost:3000/user/register',{
@@ -36,9 +35,7 @@ function handle_login(event){
         email: event.target.email.value,
         password: event.target.password.value
     }
-
     // console.log(user_details)
-
     let dynamic_div = document.getElementById('dynamic')
 
     fetch('http://localhost:3000/user/login',{
