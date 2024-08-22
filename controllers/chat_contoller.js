@@ -1,6 +1,16 @@
-const { post_message_service } = require('../services/chat_service')
+const { get_message_service, post_message_service } = require('../services/chat_service')
 const get_date_time = require('../util/date_time_now')
 const { verify_jwt_token } = require('../util/jwt')
+
+async function get_message(req,res){
+    const result = await get_message_service()
+
+    if(result){
+        res.status(200).send(JSON.stringify(result))
+    }else{
+        res.status(500).send(JSON.stringify(result.error))
+    }
+}
 
 async function post_message(req,res){
     const userId = verify_jwt_token(req.headers.authorization)
@@ -12,7 +22,7 @@ async function post_message(req,res){
         created_at: date_time,
         userId: userId
     }
-    console.log(data_to_insert)
+    // console.log(data_to_insert)
     
     const result = await post_message_service(data_to_insert)
     if(result){
@@ -22,4 +32,4 @@ async function post_message(req,res){
     }
 }
 
-module.exports = { post_message }
+module.exports = { get_message, post_message }

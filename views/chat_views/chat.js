@@ -1,7 +1,33 @@
 document.addEventListener('DOMContentLoaded', ()=>{
     const form = document.getElementById('message-form')
     form.addEventListener('submit', handle_message_submit)
+    fetch_messages()
 })
+
+function fetch_messages(){
+    fetch('http://localhost:3000/get-message',{
+        method: 'GET'
+    }).then(response=>{
+        if(response.ok){
+            return response.json()
+        }else{
+            // Handle different response statuses
+            return response.json().then(error=>{
+                throw { status: response.status, ...error } // Throw an error with status code and message
+            })
+        }
+    }).then(data=>{
+        // console.log(data)
+        display_messages(data)
+    }).catch(err=>{
+        if(err.status === 500){
+            alert("Server Error, Error Code: " + err.status)
+        }else{
+            alert("An unexpected error occurred")
+        }
+        console.log(err)
+    })
+}
 
 function display_messages(messages){
     const chat_container = document.getElementById('chat-container')
@@ -39,7 +65,7 @@ function handle_message_submit(event){
         }
     }).then(data=>{
         // console.log(data)
-        display_messages([data,])
+        fetch_messages()
     }).catch(err=>{
         if(err.status === 500){
             alert("Server Error, Error Code: " + err.status)
