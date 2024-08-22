@@ -56,8 +56,9 @@ function handle_login(event){
         }
     }).then(data=>{
         // Handle successful login
-        dynamic_div.innerHTML = "Logged In Successfully"
+        // dynamic_div.innerHTML = "Logged In Successfully"
         localStorage.setItem("token", data.token)
+        window.location.href = '../chat_views/chat_space.html'
     }).catch(err=>{
         // Handle errors from previous block
         if (err.status === 401){
