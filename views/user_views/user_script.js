@@ -48,18 +48,30 @@ function handle_login(event){
         },
         body: JSON.stringify(user_details)
     }).then(response=>{
-        if(response.status==401){
-            //wrong password
-            dynamic_div.innerHTML = "Wrong Password, Error Code: " + response.status
-        }else if(response.status==404){
-            dynamic_div.innerHTML = "User Not Found, Error Code: " + response.status
-        }else if(response.status==200){
-            return response.json()
+        // Check if response status is successful
+        if(response.ok){
+            return response.json() // Parse JSON response
+        }else{
+            // Handle different response statuses
+            return response.json().then(error=>{
+                throw { status: response.status, ...error } // Throw an error with status code and message
+            })
         }
-    }).then(response=>{
+    }).then(data=>{
+        // Handle successful login
         dynamic_div.innerHTML = "Logged In Successfully"
-        localStorage.setItem("token", response.token)
+        localStorage.setItem("token", data.token)
     }).catch(err=>{
-        console.log(err)
+        // Handle errors from previous block
+        if (err.status === 401){
+            dynamic_div.innerHTML = "Wrong Password, Error Code: " + err.status
+        }else if(err.status === 404){
+            dynamic_div.innerHTML = "User Not Found, Error Code: " + err.status
+        }else if(err.status === 500){
+            dynamic_div.innerHTML = "Server Error, Error Code: " + err.status
+        }else{
+            dynamic_div.innerHTML = "An unexpected error occurred"
+        }
+        console.error(err)
     })
 }
