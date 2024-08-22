@@ -37,5 +37,29 @@ function handle_login(event){
         password: event.target.password.value
     }
 
-    console.log(user_details)
+    // console.log(user_details)
+
+    let dynamic_div = document.getElementById('dynamic')
+
+    fetch('http://localhost:3000/user/login',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user_details)
+    }).then(response=>{
+        if(response.status==401){
+            //wrong password
+            dynamic_div.innerHTML = "Wrong Password, Error Code: " + response.status
+        }else if(response.status==404){
+            dynamic_div.innerHTML = "User Not Found, Error Code: " + response.status
+        }else if(response.status==200){
+            return response.json()
+        }
+    }).then(response=>{
+        dynamic_div.innerHTML = "Logged In Successfully"
+        localStorage.setItem("token", response.token)
+    }).catch(err=>{
+        console.log(err)
+    })
 }

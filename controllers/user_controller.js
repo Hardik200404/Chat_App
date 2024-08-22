@@ -1,4 +1,5 @@
 const { register_service, login_service } = require('../services/user_service')
+const { generate_jwt_token } = require('../util/jwt')
 const bcrypt = require('bcrypt')
 
 async function register(req,res){
@@ -22,12 +23,12 @@ async function login(req,res){
             if(bcrypt.compareSync(req.body.password, db_res.dataValues.password)){
                 //checking password
                 let token = generate_jwt_token(db_res.dataValues.id)
-                res.status(200).send(JSON.stringify({message: "Logged In Successfullly",token:token}))
+                res.status(200).send(JSON.stringify({ message: "Logged In Successfullly", token: token }))
             }else{
-                res.status(401).send(JSON.stringify({error: "Bad Credentials"}))
+                res.status(401).send(JSON.stringify({ error: "Bad Credentials" }))
             }
         }else{
-            res.status(404).send(JSON.stringify({error: "User Not Found"}))
+            res.status(404).send(JSON.stringify({ error: "User Not Found" }))
         }
     }
 }
