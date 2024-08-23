@@ -73,3 +73,9 @@ function handle_login(event){
         console.error(err)
     })
 }
+
+function handle_create_group(event){
+    event.preventDefault()
+
+    console.log(event.target.group_name.value)
+}

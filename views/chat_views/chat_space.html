@@ -12,13 +12,21 @@
         <button id="prev-btn"><i class="fa-solid fa-angles-up"></i></button>
         <button id="next-btn"><i class="fa-solid fa-angles-down"></i></button>
     </div>
-    <div class="chat-container" id="chat-container">
-    </div>
-    <div class="form-container" id="form-container">
-        <form id="message-form">
-            <input id="message" type="text" placeholder="message">
-            <button type="submit">Send</button>
-        </form>
+    <div class="child-container">
+        <div class="group-container">
+            <h4>Groups <i class="fa-solid fa-user-group"></i></h4>
+            <button id="add-grp-btn"><i class="fa-solid fa-plus"></i></button>
+            <nav class="group-list-container"></nav>
+        </div>
+        <div class="chat-form-container">
+            <div class="chat-container" id="chat-container"></div>
+            <div class="form-container" id="form-container">
+                <form id="message-form">
+                    <input id="message" type="text" placeholder="message">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
     </div>
 </body>
 <script src="chat.js"></script>

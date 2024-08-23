@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
             fetch_messages()
         }
     })
+
+    document.getElementById('add-grp-btn').addEventListener('click', ()=>{
+        window.location.href = '../user_views/add_group.html'
+    })
 })
 
 function fetch_messages(){

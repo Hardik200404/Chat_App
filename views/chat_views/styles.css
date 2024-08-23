@@ -1,54 +1,19 @@
-/* Define basic styling for the body and html to ensure full height */
-html, body {
-    height: 100%;
+body {
     margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
-/* Flexbox container to handle layout */
 .parent-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
-}
-
-/* Container for the chat, expands to fill available space */
-.chat-container {
-    flex: 1; /* Takes up the remaining space */
-    padding: 20px;
-    background-color: #f5f5f5; 
-    border-bottom: 1px solid #ddd; 
-}
-
-/* Container for the form, fixed at the bottom */
-.form-container {
-    padding: 10px;
-    background-color: #ffffff; 
-    border-top: 1px solid #ddd; 
-    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); 
-}
-
-/* Style the form elements */
-form {
-    display: flex;
-    align-items: center;
-    max-width: 800px; /* Set a max width for the form */
-    margin: 0 auto; /* Center the form horizontally */
-}
-
-input[type="text"] {
-    flex: 1; /* Input takes up remaining space within the form */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin: 0 10px; /* Space on both sides of the input */
-    max-width: 800px; /* Set a max width for the input */
+    height: 100vh;
 }
 
 .pagination, h4 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f0f0;
 }
 
 .pagination button {
@@ -77,16 +42,64 @@ input[type="text"] {
     background-color: #004085; 
 }
 
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff; 
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.child-container {
+    display: flex;
+    flex: 1;
+    padding: 10px;
 }
 
-button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+.group-container {
+    width: 20%;
+    background-color: #e9ecef;
+    padding: 10px;
+    box-sizing: border-box;
+    border-right: 1px solid #ddd;
+}
+
+.chat-form-container, .group-list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-left: 10px;
+}
+
+.chat-container {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.form-container {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.form-container form {
+    display: flex;
+    gap: 10px;
+}
+
+.form-container input {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-container button {
+    padding: 5px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
 }
