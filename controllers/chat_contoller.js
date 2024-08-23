@@ -3,7 +3,7 @@ const get_date_time = require('../util/date_time_now')
 const { verify_jwt_token } = require('../util/jwt')
 
 async function get_message(req,res){
-    const result = await get_message_service()
+    const result = await get_message_service(req.query.page, req.query.limit)
 
     if(result){
         res.status(200).send(JSON.stringify(result))

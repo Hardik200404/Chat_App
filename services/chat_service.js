@@ -2,15 +2,20 @@ const chat_model = require('../models/chat_model')
 const user_model = require('../models/user_model')
 const sequelize = require('../util/database')
 
-async function get_message_service(){
+async function get_message_service(page, limit){
+    const offset = (page - 1) * limit
+
     let result
     try{
         // Start a transaction
         await sequelize.transaction(async(t)=>{
             // Get the messages
-            result = await chat_model.findAll({limit: 10},{ transaction: t })
+            result = await chat_model.findAndCountAll(
+                {order: [['id', 'DESC']], limit: +limit, offset: offset},
+                { transaction: t }
+            )
         })
-        return result
+        return { messages: result.rows, total_pages: Math.ceil(result.count / limit) }
     }catch(err){
         console.log(err)
         return {error: err} 

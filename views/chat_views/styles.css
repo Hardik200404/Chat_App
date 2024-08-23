@@ -45,6 +45,38 @@ input[type="text"] {
     max-width: 800px; /* Set a max width for the input */
 }
 
+.pagination, h4 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.pagination button {
+    background-color: #007bff;            
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for buttons */
+.pagination button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+/* Disabled state styling */
+.pagination button:disabled {
+    background-color: #c0c0c0;
+    cursor: not-allowed;       
+    color: #6c757d;            
+}
+
+/* Active state (for better visual feedback) */
+.pagination button:active:not(:disabled) {
+    background-color: #004085; 
+}
+
 button {
     padding: 10px 20px;
     border: none;
