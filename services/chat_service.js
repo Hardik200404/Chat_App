@@ -8,7 +8,7 @@ async function get_message_service(){
         // Start a transaction
         await sequelize.transaction(async(t)=>{
             // Get the messages
-            result = await chat_model.findAll({ transaction: t })
+            result = await chat_model.findAll({limit: 10},{ transaction: t })
         })
         return result
     }catch(err){

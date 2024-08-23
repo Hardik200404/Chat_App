@@ -2,9 +2,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const form = document.getElementById('message-form')
     form.addEventListener('submit', handle_message_submit)
     fetch_messages()
-
-    // Getting new messages every 5 sec
-    // setInterval(fetch_messages, 5000)
+    display_messages(localStorage.getItem('messages'))
 })
 
 function fetch_messages(){
@@ -21,7 +19,8 @@ function fetch_messages(){
         }
     }).then(data=>{
         // console.log(data)
-        display_messages(data)
+        localStorage.setItem('messages',JSON.stringify(data))
+        // display_messages(data)
     }).catch(err=>{
         if(err.status === 500){
             alert("Server Error, Error Code: " + err.status)
@@ -33,6 +32,7 @@ function fetch_messages(){
 }
 
 function display_messages(messages){
+    messages = JSON.parse(messages)
     const chat_container = document.getElementById('chat-container')
     chat_container.innerHTML = '' // Clear existing messages
 
