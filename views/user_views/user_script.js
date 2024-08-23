@@ -77,5 +77,41 @@ function handle_login(event){
 function handle_create_group(event){
     event.preventDefault()
 
-    console.log(event.target.group_name.value)
+    let dynamic_div = document.getElementById('dynamic')
+
+    const group_details = { 
+        name: event.target.group_name.value,
+        admin: localStorage.getItem('token')
+    }
+
+    fetch('http://localhost:3000/create-group',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(group_details)
+    }).then(response=>{
+        // Check if response status is successful
+        if(response.ok){
+            return response.json() // Parse JSON response
+        }else{
+            // Handle different response statuses
+            return response.json().then(error=>{
+                throw { status: response.status, ...error } // Throw an error with status code and message
+            })
+        }
+    }).then(data=>{
+        localStorage.setItem('group_details', JSON.stringify({ id: data.id, group_name: data.name }))
+        window.location.href = '../chat_views/chat_space.html'
+    }).catch(err=>{
+        // Handle errors from previous block
+        if (err.status === 403){
+            dynamic_div.innerHTML = "Group Already Exists: " + err.status
+        }else if(err.status === 500){
+            dynamic_div.innerHTML = "Server Error, Error Code: " + err.status
+        }else{
+            dynamic_div.innerHTML = "An unexpected error occurred"
+        }
+        console.error(err)
+    })
 }
