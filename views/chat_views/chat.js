@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const form = document.getElementById('message-form')
     form.addEventListener('submit', handle_message_submit)
     fetch_messages()
+
+    // Getting new messages every 5 sec
+    // setInterval(fetch_messages, 5000)
 })
 
 function fetch_messages(){
