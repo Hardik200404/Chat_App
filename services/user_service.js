@@ -75,5 +75,36 @@ async function get_members_service(groupId){
     }
 }
 
-module.exports = { register_service, login_service, 
-    create_group_service, get_groups_service, get_members_service }
+async function get_user_service(query){
+    let user
+    try{
+        if(query.email){
+            user = await user_model.findOne({ where: { email: query.email }})
+        }else{
+            const phone = '+' + query.phone.trim()
+            user = await user_model.findOne({ where: { phone: phone }})
+        }
+        return user.dataValues
+    }catch(err){
+        console.log(err)
+        return { error: err }
+    }
+}
+
+async function add_user_service(groupId, userId){
+    groupId = +groupId
+    try{
+        await sequelize.transaction(async(t)=>{
+            const group = await group_model.findByPk(groupId, { transaction: t })
+
+            await group.addUser(userId, { transaction: t })
+        })
+        return { message: 'User Added To Group Successfully' }
+    }catch(err){
+        console.log(err)
+        return { error: err }
+    }
+}
+
+module.exports = { register_service, login_service, add_user_service, 
+    create_group_service, get_groups_service, get_members_service, get_user_service }

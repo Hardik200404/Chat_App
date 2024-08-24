@@ -1,4 +1,5 @@
-const { register_service, login_service, create_group_service,
+const { register_service, login_service, add_user_service, 
+    create_group_service, get_user_service, 
      get_groups_service, get_members_service } = require('../services/user_service')
 const { generate_jwt_token, verify_jwt_token } = require('../util/jwt')
 const bcrypt = require('bcrypt')
@@ -74,4 +75,28 @@ async function get_members(req,res){
     }
 }
 
-module.exports = { register, login, create_group, get_groups, get_members }
+async function get_user(req,res){
+    const response = await get_user_service(req.query)
+
+    if(response){
+        if(response.error){
+            res.status(500).send(JSON.stringify(response.error))
+        }else{
+            res.status(200).send(JSON.stringify(response))
+        }
+    }else{
+        res.status(404).send(JSON.stringify({ error: "User Not Found" }))
+    }
+}
+
+async function add_user(req,res){
+    const response = await add_user_service(req.body.groupId, req.body.userId)
+
+    if(response.error){
+        res.status(500).send(JSON.stringify(response.error))
+    }else{
+        res.status(201).send(JSON.stringify(response))
+    }
+}
+
+module.exports = { register, login, create_group, get_groups, get_members, get_user, add_user }
