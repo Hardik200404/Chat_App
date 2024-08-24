@@ -96,7 +96,11 @@ async function add_user(req,res){
     if(response.error){
         res.status(500).send(JSON.stringify(response.error))
     }else{
-        res.status(201).send(JSON.stringify(response))
+        if(response.is_member){
+            res.status(403).send(JSON.stringify({ message: 'User Already A Member' }))
+        }else{
+            res.status(201).send(JSON.stringify({ message: 'User Added To Group Successfully' }))
+        }
     }
 }
 

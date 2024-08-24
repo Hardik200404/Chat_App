@@ -87,7 +87,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }).catch(err=>{
             if(err.status === 500){
                 alert("Server Error, Error Code: " + err.status)
-            }else{
+            }else if(err.status === 403){
+                alert("User Already A Member, Error Code: " + err.status)
+            }
+            else{
                 alert("An unexpected error occurred")
             }
             console.log(err)

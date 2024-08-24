@@ -93,13 +93,19 @@ async function get_user_service(query){
 
 async function add_user_service(groupId, userId){
     groupId = +groupId
+    let user_in_group
     try{
         await sequelize.transaction(async(t)=>{
             const group = await group_model.findByPk(groupId, { transaction: t })
 
-            await group.addUser(userId, { transaction: t })
+            user_in_group = await group.hasUser(userId, { transaction: t })
+            if(!user_in_group){
+                // Not a member
+                await group.addUser(userId, { transaction: t })
+            }
         })
-        return { message: 'User Added To Group Successfully' }
+
+        return { is_member: user_in_group }
     }catch(err){
         console.log(err)
         return { error: err }

@@ -105,9 +105,7 @@ function handle_create_group(event){
         window.location.href = '../chat_views/chat_space.html'
     }).catch(err=>{
         // Handle errors from previous block
-        if (err.status === 403){
-            dynamic_div.innerHTML = "Group Already Exists: " + err.status
-        }else if(err.status === 500){
+        if(err.status === 500){
             dynamic_div.innerHTML = "Server Error, Error Code: " + err.status
         }else{
             dynamic_div.innerHTML = "An unexpected error occurred"
