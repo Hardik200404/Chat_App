@@ -57,5 +57,23 @@ async function get_groups_service(userId){
     }
 }
 
+async function get_members_service(groupId){
+    let db_res
+    try{
+        await sequelize.transaction(async(t)=>{
+            db_res = await group_model.findByPk(groupId, {
+                include: {
+                    model: user_model,
+                    through: { attributes: [] }
+                }
+            })
+        })
+        return db_res.dataValues.users
+    }catch(err){
+        console.log(err)
+        return { error: err }
+    }
+}
+
 module.exports = { register_service, login_service, 
-    create_group_service, get_groups_service }
+    create_group_service, get_groups_service, get_members_service }
