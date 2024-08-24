@@ -10,12 +10,48 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(group){
         // Get group details
         const group_details = JSON.parse(localStorage.getItem('group_details'))
-    
+        
+        const chat_form_container = document.getElementById('chat-form-container')
+        const group_info_container = document.getElementById('group-info-container')
+        
         const h2_group_name = document.createElement('h2')
         h2_group_name.innerHTML = group_details.group_name
+        group_info_container.prepend(h2_group_name)
 
-        const chat_form_container = document.getElementById('chat-form-container')
-        chat_form_container.prepend(h2_group_name)
+        // Check if user is admin
+        fetch(`http://localhost:3000/check-admin?groupId=${group_details.id}&userId=${localStorage.getItem('token')}`,{
+            method: 'GET'
+        }).then(response=>{
+            if(response.ok){
+                return response.json()
+            }else{
+                // Handle different response statuses
+                return response.json().then(error=>{
+                    throw { status: response.status, ...error } // Throw an error with status code and message
+                })
+            }
+        }).then(data=>{
+            // console.log(data)
+            if(data.admin){
+                // Show user as Admin
+                const p_admin = document.createElement('p')
+                p_admin.innerHTML = 'You Are The Admin'+ String.fromCodePoint(0x26A1)
+                chat_form_container.prepend(p_admin)
+
+                // Show group edit button
+                const edt_btn = document.createElement('button')
+                edt_btn.innerHTML = `Edit Group` + `<i class="fa-solid fa-pencil"></i>`
+                edt_btn.onclick = () => window.location.href = '../user_views/edit-group.html'
+                group_info_container.appendChild(edt_btn)
+            }
+        }).catch(err=>{
+            if(err.status === 500){
+                alert("Server Error, Error Code: " + err.status)
+            }else{
+                alert("An unexpected error occurred")
+            }
+            console.log(err)
+        })
 
         const form = document.getElementById('message-form')
         form.addEventListener('submit', handle_message_submit)

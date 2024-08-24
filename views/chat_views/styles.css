@@ -56,6 +56,11 @@ body {
     border-right: 1px solid #ddd;
 }
 
+.group-info-container {
+    display: flex;
+    justify-content: space-between;
+}
+
 .chat-form-container, .group-list-container {
     flex: 1;
     display: flex;

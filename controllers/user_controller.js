@@ -1,6 +1,7 @@
 const { register_service, login_service, add_user_service, 
     create_group_service, get_user_service, 
-     get_groups_service, get_members_service } = require('../services/user_service')
+     get_groups_service, get_members_service, 
+     check_admin_service} = require('../services/user_service')
 const { generate_jwt_token, verify_jwt_token } = require('../util/jwt')
 const bcrypt = require('bcrypt')
 
@@ -99,4 +100,20 @@ async function add_user(req,res){
     }
 }
 
-module.exports = { register, login, create_group, get_groups, get_members, get_user, add_user }
+async function check_admin(req,res){
+    const userId = verify_jwt_token(req.query.userId)
+    const response = await check_admin_service(req.query.groupId)
+
+    if(response){
+        if(response.error){
+            res.status(500).send(JSON.stringify(response.error))
+        }else{
+            res.status(200).send(JSON.stringify({ admin: response.admin == userId }))
+        }
+    }else{
+        res.status(404).send(JSON.stringify({ error: "Group Not Found" }))
+    }
+}
+
+module.exports = { register, login, create_group, get_groups, 
+    get_members, get_user, add_user, check_admin }
