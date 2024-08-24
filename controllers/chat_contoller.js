@@ -3,7 +3,7 @@ const get_date_time = require('../util/date_time_now')
 const { verify_jwt_token } = require('../util/jwt')
 
 async function get_message(req,res){
-    const result = await get_message_service(req.query.page, req.query.limit)
+    const result = await get_message_service(req.query)
 
     if(result){
         res.status(200).send(JSON.stringify(result))
@@ -20,7 +20,8 @@ async function post_message(req,res){
         message: req.body.message,
         username: null,
         created_at: date_time,
-        userId: userId
+        userId: userId,
+        groupId: req.body.groupId
     }
     // console.log(data_to_insert)
     

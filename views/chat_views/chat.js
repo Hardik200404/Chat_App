@@ -8,6 +8,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const group = localStorage.getItem('group_details')
 
     if(group){
+        // Get group details
+        const group_details = JSON.parse(localStorage.getItem('group_details'))
+    
+        const h2_group_name = document.createElement('h2')
+        h2_group_name.innerHTML = group_details.group_name
+
+        const chat_form_container = document.getElementById('chat-form-container')
+        chat_form_container.prepend(h2_group_name)
+
         const form = document.getElementById('message-form')
         form.addEventListener('submit', handle_message_submit)
         fetch_messages()
@@ -38,7 +47,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 })
 
 function fetch_groups(){
-    fetch('http://localhost:3000/get-groups',{
+    const userId = localStorage.getItem('token')
+    fetch(`http://localhost:3000/get-groups?userId=${userId}`,{
         method: 'GET'
     }).then(response=>{
         if(response.ok){
@@ -64,25 +74,30 @@ function fetch_groups(){
 
 function display_groups(groups){
     const group_list = document.getElementById('group-list')
-    groups.forEach((group)=>{
-        const group_btn = document.createElement('button')
-        group_btn.id = group.id
-        group_btn.textContent = group.name
-        group_btn.addEventListener('click', function() {
-            localStorage.setItem('group_details', JSON.stringify({
-                id: group_btn.id,
-                group_name: group_btn.textContent
-            }))
-            window.location.reload()
+    group_list.innerHTML = ''
+
+    if(groups.length>0){
+        groups.forEach((group)=>{
+            const group_btn = document.createElement('button')
+            group_btn.id = group.id
+            group_btn.textContent = group.name
+            group_btn.addEventListener('click', function() {
+                localStorage.setItem('group_details', JSON.stringify({
+                    id: group_btn.id,
+                    group_name: group_btn.textContent
+                }))
+                window.location.reload()
+            })
+            group_list.appendChild(group_btn) 
         })
-        group_list.appendChild(group_btn) 
-    })
+    }else{
+        group_list.innerHTML = 'Add A Group'
+    }
 }
 
 function fetch_messages(){
-    const group_details = localStorage.getItem('group_details')
-    // group_id=${group_details.id}&
-    fetch(`http://localhost:3000/get-message?page=${window.current_page}&limit=10`,{
+    const group_details = JSON.parse(localStorage.getItem('group_details'))
+    fetch(`http://localhost:3000/get-message?groupId=${group_details.id}&page=${window.current_page}&limit=10`,{
         method: 'GET'
     }).then(response=>{
         if(response.ok){
@@ -111,14 +126,6 @@ function fetch_messages(){
 function display_messages(messages){
     const chat_container = document.getElementById('chat-container')
     chat_container.innerHTML = '' // Clear existing messages
-    
-    const group_details = JSON.parse(localStorage.getItem('group_details'))
-    
-    const h2_group_name = document.createElement('h2')
-    h2_group_name.innerHTML = group_details.group_name
-
-    const chat_form_container = document.getElementById('chat-form-container')
-    chat_form_container.prepend(h2_group_name)
 
     if(messages.length>0){
         //showing day, date and year on top
@@ -156,8 +163,11 @@ function update_buttons() {
 function handle_message_submit(event){
     event.preventDefault()
 
-    const message = { message: event.target.message.value }
-    //console.log(message)
+    const message = { 
+                    message: event.target.message.value, 
+                    groupId: JSON.parse(localStorage.getItem('group_details')).id 
+                }
+    // console.log(message)
 
     fetch('http://localhost:3000/post-message',{
         method: 'POST',

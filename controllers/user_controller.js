@@ -46,7 +46,8 @@ async function create_group(req,res){
 }
 
 async function get_groups(req,res){
-    const response = await get_groups_service()
+    const userId = verify_jwt_token(req.query.userId)
+    const response = await get_groups_service(userId)
 
     if(response){
         if(response.error){

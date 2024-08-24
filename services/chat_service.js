@@ -2,7 +2,10 @@ const chat_model = require('../models/chat_model')
 const user_model = require('../models/user_model')
 const sequelize = require('../util/database')
 
-async function get_message_service(page, limit){
+async function get_message_service(query){
+    const groupId = query.groupId
+    const page = query.page
+    const limit = query.limit
     const offset = (page - 1) * limit
 
     let result
@@ -10,8 +13,12 @@ async function get_message_service(page, limit){
         // Start a transaction
         await sequelize.transaction(async(t)=>{
             // Get the messages
-            result = await chat_model.findAndCountAll(
-                {order: [['id', 'DESC']], limit: +limit, offset: offset},
+            result = await chat_model.findAndCountAll({
+                    where: {'groupId': groupId},
+                    order: [['id', 'DESC']], 
+                    limit: +limit, 
+                    offset: offset
+                },
                 { transaction: t }
             )
         })

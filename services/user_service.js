@@ -39,10 +39,18 @@ async function create_group_service(group_details){
     }
 }
 
-async function get_groups_service(){
+async function get_groups_service(userId){
+    let db_res
     try{
-        let db_res = await group_model.findAll()
-        return db_res
+        await sequelize.transaction(async(t)=>{
+            db_res = await user_model.findByPk(userId, {
+                include: {
+                    model: group_model,
+                    through: { attributes: [] }
+                }
+            })
+        })
+        return db_res.dataValues.groups
     }catch(err){
         console.log(err)
         return { error: err }
