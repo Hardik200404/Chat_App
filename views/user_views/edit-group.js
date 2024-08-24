@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', ()=>{
     // Get the group name
-    const group_name_h6 = document.getElementById('group-name')
     const group_details = JSON.parse(localStorage.getItem('group_details'))
+    const adminId = group_details.admin
+    
+    const group_name_h6 = document.getElementById('group-name')
     group_name_h6.innerHTML = 'Group: '+ group_details.group_name
 
     const search_form = document.getElementById('search-form')
@@ -89,8 +91,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 alert("Server Error, Error Code: " + err.status)
             }else if(err.status === 403){
                 alert("User Already A Member, Error Code: " + err.status)
-            }
-            else{
+            }else{
                 alert("An unexpected error occurred")
             }
             console.log(err)
@@ -116,7 +117,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
             // console.log(data)
             existing_members.forEach(member=>{
                 const li = document.createElement('li')
-                li.textContent = member.username + ' ( ' +member.phone + ' )'
+                if(member.id == adminId){
+                    li.textContent = member.username + ' ( ' +member.phone + ' ) ' + String.fromCodePoint(0x1F451)
+                }else{
+                    li.textContent = member.username + ' ( ' +member.phone + ' )'
+                }
                 members_list.appendChild(li)
             })
         }).catch(err=>{

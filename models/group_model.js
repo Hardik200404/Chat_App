@@ -6,6 +6,10 @@ const group_model = sequelize.define('groups',{
         type: Sequelize.STRING,
         allowNull: false
     },
+    desc:{
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     admin:{
         type: Sequelize.STRING,
         allowNull: false

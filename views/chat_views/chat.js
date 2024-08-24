@@ -44,6 +44,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 edt_btn.onclick = () => window.location.href = '../user_views/edit-group.html'
                 group_info_container.appendChild(edt_btn)
             }
+            // Show group info button
+            const grp_info_btn = document.createElement('button')
+            grp_info_btn.innerHTML = `Group Info` + `<i class="fa-solid fa-circle-info"></i>`
+            grp_info_btn.onclick = () => window.location.href = '../user_views/group_info.html'
+            group_info_container.appendChild(grp_info_btn)
         }).catch(err=>{
             if(err.status === 500){
                 alert("Server Error, Error Code: " + err.status)
@@ -120,7 +125,9 @@ function display_groups(groups){
             group_btn.addEventListener('click', function() {
                 localStorage.setItem('group_details', JSON.stringify({
                     id: group_btn.id,
-                    group_name: group_btn.textContent
+                    group_name: group_btn.textContent,
+                    group_desc: group.desc,
+                    admin: group.admin
                 }))
                 window.location.reload()
             })

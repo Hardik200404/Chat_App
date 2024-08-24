@@ -81,6 +81,7 @@ function handle_create_group(event){
 
     const group_details = { 
         name: event.target.group_name.value,
+        desc: event.target.group_desc.value,
         admin: localStorage.getItem('token')
     }
 
@@ -101,7 +102,12 @@ function handle_create_group(event){
             })
         }
     }).then(data=>{
-        localStorage.setItem('group_details', JSON.stringify({ id: data.id, group_name: data.name }))
+        localStorage.setItem('group_details', JSON.stringify({
+            id: data.id,
+            group_name: data.name,
+            group_desc: data.desc,
+            admin: data.admin
+        }))
         window.location.href = '../chat_views/chat_space.html'
     }).catch(err=>{
         // Handle errors from previous block
