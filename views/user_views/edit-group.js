@@ -5,12 +5,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     
     const group_name_h6 = document.getElementById('group-name')
     group_name_h6.innerHTML = 'Group: '+ group_details.group_name
-
+    
     const search_form = document.getElementById('search-form')
     const search_query = document.getElementById('search-query')
     const user_list = document.getElementById('user-list')
     const members_list = document.getElementById('members-list')
-
+    
+    // Initial display of existing members
+    display_existing_members()
+    
     // Function to search users based on query
     function search_user(query, type){
         let query_text
@@ -117,10 +120,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
             // console.log(data)
             existing_members.forEach(member=>{
                 const li = document.createElement('li')
+                
                 if(member.id == adminId){
                     li.textContent = member.username + ' ( ' +member.phone + ' ) ' + String.fromCodePoint(0x1F451)
                 }else{
                     li.textContent = member.username + ' ( ' +member.phone + ' )'
+                    
+                    const del_btn = document.createElement('button')
+                    del_btn.innerHTML = `<i class="fa-solid fa-xmark"></i>`
+                    del_btn.onclick = () => remove_user(member.id)
+                    li.appendChild(del_btn)
                 }
                 members_list.appendChild(li)
             })
@@ -145,15 +154,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 return
             }
             const results = search_user(query, type)
-            console.log(results)
-            // display_search_results(results)
+            // console.log(results)
         }
     })
 
-    // Initial display of existing members
-    display_existing_members()
 
-
+    function remove_user(userId){
+        fetch(`http://localhost:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
+            method: 'DELETE'
+        }).then(response=>{
+            alert('User Has Been Removed From Group')
+            window.location.reload()
+        }).catch(err=>{
+            if(err.status === 500){
+                alert("Server Error, Error Code: " + err.status)
+            }else{
+                alert("An unexpected error occurred")
+            }
+            console.log(err)
+        })
+    }
     
     // Function to check if the query is an email or phone number
     function query_type(query) {

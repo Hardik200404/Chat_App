@@ -122,6 +122,23 @@ async function check_admin_service(groupId){
     }
 }
 
+async function remove_user_service(groupId, userId){
+    groupId = +groupId
+    userId = +userId
+
+    try{
+        await sequelize.transaction(async(t)=>{
+            const group = await group_model.findByPk(groupId, { transaction: t })
+
+            await group.removeUser(userId, { transaction: t })
+        })
+        return { message: 'User Removed Successfully' }
+    }catch(err){
+        console.log(err)
+        return { error: err }
+    }
+}
+
 module.exports = { register_service, login_service, add_user_service, 
-    create_group_service, get_groups_service, 
+    create_group_service, get_groups_service, remove_user_service,
     get_members_service, get_user_service, check_admin_service }
