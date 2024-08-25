@@ -9,7 +9,7 @@ function handle_register(event){
     }
     // console.log(user_details)
 
-    fetch('http://localhost:3000/user/register',{
+    fetch('http://13.233.233.15:3000/user/register',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ function handle_login(event){
     // console.log(user_details)
     let dynamic_div = document.getElementById('dynamic')
 
-    fetch('http://localhost:3000/user/login',{
+    fetch('http://13.233.233.15:3000/user/login',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ function handle_create_group(event){
         admin: localStorage.getItem('token')
     }
 
-    fetch('http://localhost:3000/create-group',{
+    fetch('http://13.233.233.15:3000/create-group',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

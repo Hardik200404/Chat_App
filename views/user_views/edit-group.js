@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             query_text = `email=${query}`
         }
 
-        fetch(`http://localhost:3000/get-user?${query_text}`,{
+        fetch(`http://13.233.233.15:3000/get-user?${query_text}`,{
             method: 'GET'
         }).then(response=>{
             if(response.ok){
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             userId: user.id 
         }
 
-        fetch('http://localhost:3000/add-user',{
+        fetch('http://13.233.233.15:3000/add-user',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     function display_existing_members(){
         members_list.innerHTML = '' // Clear previous members
         const groupId = group_details.id
-        fetch(`http://localhost:3000/get-members?groupId=${groupId}`,{
+        fetch(`http://13.233.233.15:3000/get-members?groupId=${groupId}`,{
             method: 'GET'
         }).then(response=>{
             if(response.ok){
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 
     function remove_user(userId){
-        fetch(`http://localhost:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
+        fetch(`http://13.233.233.15:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
             method: 'DELETE'
         }).then(response=>{
             alert('User Has Been Removed From Group')
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             group_desc: group_desc_input.value
         }
         
-        fetch(`http://localhost:3000/update-group?groupId=${group_details.id}`,{
+        fetch(`http://13.233.233.15:3000/update-group?groupId=${group_details.id}`,{
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

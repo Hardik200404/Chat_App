@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     grp_desc.appendChild(grp_desc_p)
 
     // Check if the user is admin
-    fetch(`http://localhost:3000/check-admin?groupId=${group_details.id}&userId=${localStorage.getItem('token')}`,{
+    fetch(`http://13.233.233.15:3000/check-admin?groupId=${group_details.id}&userId=${localStorage.getItem('token')}`,{
         method: 'GET'
     }).then(response=>{
         if(response.ok){
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     })
 
     members_list.innerHTML = '' // Clear previous members
-    fetch(`http://localhost:3000/get-members?groupId=${groupId}`,{
+    fetch(`http://13.233.233.15:3000/get-members?groupId=${groupId}`,{
         method: 'GET'
     }).then(response=>{
         if(response.ok){
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 })
 
 function delete_group(groupId){
-    fetch(`http://localhost:3000/delete-group?groupId=${groupId}`,{
+    fetch(`http://13.233.233.15:3000/delete-group?groupId=${groupId}`,{
         method: 'DELETE'
     }).then(response=>{
         alert('Group Has Been Removed')

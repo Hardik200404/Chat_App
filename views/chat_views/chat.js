@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         group_info_container.prepend(h2_group_name)
 
         // Check if user is admin
-        fetch(`http://localhost:3000/check-admin?groupId=${group_details.id}&userId=${localStorage.getItem('token')}`,{
+        fetch(`http://13.233.233.15:3000/check-admin?groupId=${group_details.id}&userId=${localStorage.getItem('token')}`,{
             method: 'GET'
         }).then(response=>{
             if(response.ok){
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 function fetch_groups(){
     const userId = localStorage.getItem('token')
-    fetch(`http://localhost:3000/get-groups?userId=${userId}`,{
+    fetch(`http://13.233.233.15:3000/get-groups?userId=${userId}`,{
         method: 'GET'
     }).then(response=>{
         if(response.ok){
@@ -134,7 +134,7 @@ function display_groups(groups){
 
 function fetch_messages(){
     const group_details = JSON.parse(localStorage.getItem('group_details'))
-    fetch(`http://localhost:3000/get-message?groupId=${group_details.id}&page=${window.current_page}&limit=10`,{
+    fetch(`http://13.233.233.15:3000/get-message?groupId=${group_details.id}&page=${window.current_page}&limit=10`,{
         method: 'GET'
     }).then(response=>{
         if(response.ok){
@@ -206,7 +206,7 @@ function handle_message_submit(event){
                 }
     // console.log(message)
 
-    fetch('http://localhost:3000/post-message',{
+    fetch('http://13.233.233.15:3000/post-message',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
