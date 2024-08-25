@@ -1,4 +1,4 @@
-const { register_service, login_service, add_user_service, 
+const { register_service, login_service, add_user_service, update_group_service,
     create_group_service, get_user_service, remove_user_service,
      get_groups_service, get_members_service, delete_group_service, 
      check_admin_service} = require('../services/user_service')
@@ -139,5 +139,14 @@ async function delete_group(req,res){
     }
 }
 
-module.exports = { register, login, create_group, get_groups, 
+async function update_group(req,res){
+    const response = await update_group_service(req.query.groupId, req.body)
+
+    if(response.error){
+        res.status(500).send(JSON.stringify(response.error))
+    }else{
+        res.status(201).send(JSON.stringify(response))
+    }
+}
+module.exports = { register, login, create_group, get_groups, update_group,
     get_members, get_user, add_user, check_admin, remove_user, delete_group }

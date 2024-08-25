@@ -16,7 +16,8 @@ require('./routes/chat_routes')(app)
 user_model.hasMany(chat_model)
 chat_model.belongsTo(user_model)
 
-group_model.hasMany(chat_model)
+group_model.hasMany(chat_model,{ onDelete: 'CASCADE' }) 
+// If the group is removed, chats should be removed
 chat_model.belongsTo(group_model)
 
 // Defining many to many relation which the user and group will have

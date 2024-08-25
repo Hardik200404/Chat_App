@@ -1,5 +1,5 @@
 //importing controllers
-const { register, login, create_group, get_user, add_user, remove_user,
+const { register, login, create_group, get_user, add_user, remove_user, update_group,
      get_groups, get_members, check_admin, delete_group } = require('../controllers/user_controller')
 
 //importing middleware
@@ -15,5 +15,6 @@ module.exports = function(app){
     app.post('/add-user', add_user),
     app.get('/check-admin', check_admin),
     app.delete('/remove-user', remove_user),
-    app.delete('/delete-group', delete_group)
+    app.delete('/delete-group', delete_group),
+    app.put('/update-group', update_group)
 }

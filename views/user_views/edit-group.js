@@ -3,9 +3,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const group_details = JSON.parse(localStorage.getItem('group_details'))
     const adminId = group_details.admin
     
-    const group_name_h6 = document.getElementById('group-name')
-    group_name_h6.innerHTML = 'Group: '+ group_details.group_name
-    
+    const edit_group_form = document.getElementById('edit-group-form')
     const search_form = document.getElementById('search-form')
     const search_query = document.getElementById('search-query')
     const user_list = document.getElementById('user-list')
@@ -87,7 +85,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
             }
         }).then(data=>{
             // console.log(data)
-            // Update the members list display
+            user_list.innerHTML = '' // Clear result
+            // Show updated members list
             display_existing_members()
         }).catch(err=>{
             if(err.status === 500){
@@ -153,6 +152,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 alert('Please Enter Either Email Or Phone')
                 return
             }
+            search_query.value = ''// Clear search bar
             const results = search_user(query, type)
             // console.log(results)
         }
@@ -188,4 +188,54 @@ document.addEventListener('DOMContentLoaded', ()=>{
             return 'unknown'
         }
     }
+
+    // Fill the input feilds with existing values
+    const group_name_input = document.getElementById('group-name-input')
+    group_name_input.value = group_details.group_name
+    const group_desc_input = document.getElementById('group-desc-input')
+    group_desc_input.value = group_details.group_desc
+
+    edit_group_form.addEventListener('submit', event=>{
+        event.preventDefault()
+
+        const data_to_insert = {
+            group_name: group_name_input.value,
+            group_desc: group_desc_input.value
+        }
+        
+        fetch(`http://localhost:3000/update-group?groupId=${group_details.id}`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data_to_insert)
+        }).then(response=>{
+            // Check if response status is successful
+            if(response.ok){
+                return response.json() // Parse JSON response
+            }else{
+                // Handle different response statuses
+                return response.json().then(error=>{
+                    throw { status: response.status, ...error } // Throw an error with status code and message
+                })
+            }
+        }).then(data=>{
+            // console.log(data)
+            alert('Group Updated')
+            localStorage.setItem('group_details', JSON.stringify({
+                id: group_details.id,
+                group_name: data_to_insert.group_name,
+                group_desc: data_to_insert.group_desc,
+                admin: group_details.admin
+            }))
+            window.location.reload()
+        }).catch(err=>{
+            if(err.status === 500){
+                alert("Server Error, Error Code: " + err.status)
+            }else{
+                alert("An unexpected error occurred")
+            }
+            console.log(err)
+        })
+    })
 })

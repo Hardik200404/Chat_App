@@ -150,6 +150,24 @@ async function delete_group_service(groupId){
     }
 }
 
+async function update_group_service(groupId, data_to_insert){
+    groupId = +groupId
+    try{
+        await sequelize.transaction(async(t)=>{
+            await group_model.update({
+                    name: data_to_insert.group_name,
+                    desc: data_to_insert.group_desc
+                },
+                {where: { id: groupId }, transaction: t}
+            )
+        })
+        return { message: 'Group Updated Successfully' }
+    }catch(err){
+        console.error(err)
+        return { error: err }
+    }
+}
+
 module.exports = { register_service, login_service, add_user_service, 
-    create_group_service, get_groups_service, remove_user_service,
+    create_group_service, get_groups_service, remove_user_service, update_group_service,
     get_members_service, get_user_service, check_admin_service, delete_group_service }
