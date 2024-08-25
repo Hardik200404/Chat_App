@@ -37,12 +37,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 const p_admin = document.createElement('p')
                 p_admin.innerHTML = 'You Are The Admin'+ String.fromCodePoint(0x26A1)
                 chat_form_container.prepend(p_admin)
-
-                // Show group edit button
-                const edt_btn = document.createElement('button')
-                edt_btn.innerHTML = `Edit Group` + `<i class="fa-solid fa-pencil"></i>`
-                edt_btn.onclick = () => window.location.href = '../user_views/edit-group.html'
-                group_info_container.appendChild(edt_btn)
             }
             // Show group info button
             const grp_info_btn = document.createElement('button')

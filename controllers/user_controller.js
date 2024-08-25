@@ -1,6 +1,6 @@
 const { register_service, login_service, add_user_service, 
     create_group_service, get_user_service, remove_user_service,
-     get_groups_service, get_members_service, 
+     get_groups_service, get_members_service, delete_group_service, 
      check_admin_service} = require('../services/user_service')
 const { generate_jwt_token, verify_jwt_token } = require('../util/jwt')
 const bcrypt = require('bcrypt')
@@ -129,5 +129,15 @@ async function remove_user(req,res){
     }
 }
 
+async function delete_group(req,res){
+    const response = await delete_group_service(req.query.groupId)
+    
+    if(response.error){
+        res.status(500).send(JSON.stringify(response.error))
+    }else{
+        res.status(204).send(JSON.stringify(response))  
+    }
+}
+
 module.exports = { register, login, create_group, get_groups, 
-    get_members, get_user, add_user, check_admin, remove_user }
+    get_members, get_user, add_user, check_admin, remove_user, delete_group }

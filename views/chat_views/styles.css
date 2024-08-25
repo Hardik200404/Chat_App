@@ -7,6 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-color: #c2e7da
 }
 
 .pagination, h4 {
@@ -50,7 +51,7 @@ body {
 
 .group-container {
     width: 20%;
-    background-color: #e9ecef;
+    background-color: #6290c3;
     padding: 10px;
     box-sizing: border-box;
     border-right: 1px solid #ddd;

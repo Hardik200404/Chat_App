@@ -1,6 +1,6 @@
 //importing controllers
 const { register, login, create_group, get_user, add_user, remove_user,
-     get_groups, get_members, check_admin } = require('../controllers/user_controller')
+     get_groups, get_members, check_admin, delete_group } = require('../controllers/user_controller')
 
 //importing middleware
 const { verify_user } = require('../middlewares/user_auth')
@@ -14,5 +14,6 @@ module.exports = function(app){
     app.get('/get-user', get_user),
     app.post('/add-user', add_user),
     app.get('/check-admin', check_admin),
-    app.delete('/remove-user', remove_user)
+    app.delete('/remove-user', remove_user),
+    app.delete('/delete-group', delete_group)
 }

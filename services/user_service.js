@@ -139,6 +139,17 @@ async function remove_user_service(groupId, userId){
     }
 }
 
+async function delete_group_service(groupId){
+    try{
+        // Delete the group
+        await group_model.destroy({ where: { id: groupId }})
+        return { message: 'Group Removed Successfully' }
+    }catch(err){
+        console.error(err)
+        return { error: err }
+    }
+}
+
 module.exports = { register_service, login_service, add_user_service, 
     create_group_service, get_groups_service, remove_user_service,
-    get_members_service, get_user_service, check_admin_service }
+    get_members_service, get_user_service, check_admin_service, delete_group_service }
