@@ -1,11 +1,14 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const sequelize = require('./util/database')
 const user_model = require('./models/user_model')
 const chat_model = require('./models/chat_model')
 const group_model = require('./models/group_model')
 
 const app = express()
+
+app.use(express.static(path.join(__dirname,'views')))
 
 app.use(cors())
 app.use(express.json())
