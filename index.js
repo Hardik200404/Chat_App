@@ -35,6 +35,11 @@ group_model.belongsToMany(user_model,{
     otherKey:'user_id'
 })
 
+app.get('/',(req,res)=>{
+    // console.log("hello")
+    res.sendFile(path.join(__dirname, 'views/user_views', 'index.html'))
+})
+
 let PORT = process.env.PORT || 3000
 
 sequelize.sync()
