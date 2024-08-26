@@ -1,0 +1,118 @@
+/* Set basic styling for body and html to ensure full height */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Container takes full viewport height */
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #c2e7da;
+}
+
+.edit-group-info-and-search-containers {
+    display: flex;
+    height: 40%;
+    justify-content: space-between;
+    margin-left: 5px;
+}
+
+.existing-members-container {
+    height: 70%;
+    overflow-y: auto; /* Optional: Adds a scrollbar if the content overflows */
+}
+
+.edit-group-info-container {
+    width: 40%;
+    margin: 10px 5px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: #9ec6c0;
+}
+
+/* Flex container for search container and search results container */
+.search-container-results {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.parent-search-container {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 10px;
+    padding: 0px 10px;
+    background-color: #9ec6c0;
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* Search container takes up remaining space */
+.search-container {
+    flex: 1;
+    padding: 10px;
+}
+
+/* Search results container takes remaining space after search container */
+.search-results-container {
+    flex: 2;
+    padding: 10px;
+    overflow-y: auto; /* Optional: Adds a scrollbar if the content overflows */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label {
+    font-size: 20px;
+    color: #333;
+    text-align: left;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: #4c695f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #364b44;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    margin-top: 10px;
+}
+th, td {
+    padding: 8px;
+}
+th {
+    background-color: #9ec6c0;
+}
