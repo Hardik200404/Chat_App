@@ -56,7 +56,7 @@ async function get_groups_service(userId){
                 }
             })
         })
-        return db_res.dataValues.groups
+        return db_res == null ? [] : db_res.dataValues.groups
     }catch(err){
         console.log(err)
         return { error: err }

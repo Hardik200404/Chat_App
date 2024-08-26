@@ -134,7 +134,7 @@ function display_groups(groups){
             group_list.appendChild(group_btn) 
         })
     }else{
-        group_list.innerHTML = 'Add A Group'
+        alert('Add Or Join A Group')
     }
 }
 
