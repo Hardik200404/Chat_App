@@ -135,19 +135,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
                     `
                 }
                 tbody.appendChild(row)
-                // const li = document.createElement('li')
-                
-                // if(member.id == adminId){
-                //     li.textContent =  + ' ( ' +member.phone + ' ) ' + 
-                // }else{
-                //     li.textContent = member.username + ' ( ' + + ' )'
-                    
-                //     const del_btn = document.createElement('button')
-                //     del_btn.innerHTML = ``
-                //     del_btn.onclick = () => 
-                //     li.appendChild(del_btn)
-                // }
-                // members_list.appendChild(li)
             })
         }).catch(err=>{
             if(err.status === 500){
@@ -174,24 +161,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
             // console.log(results)
         }
     })
-
-
-    function remove_user(userId){
-        console.log(userId, 'delete')
-        // fetch(`http://localhost:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
-        //     method: 'DELETE'
-        // }).then(response=>{
-        //     alert('User Has Been Removed From Group')
-        //     window.location.reload()
-        // }).catch(err=>{
-        //     if(err.status === 500){
-        //         alert("Server Error, Error Code: " + err.status)
-        //     }else{
-        //         alert("An unexpected error occurred")
-        //     }
-        //     console.log(err)
-        // })
-    }
     
     // Function to check if the query is an email or phone number
     function query_type(query) {
@@ -257,3 +226,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
         })
     })
 })
+
+function remove_user(userId){
+    fetch(`http://localhost:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
+        method: 'DELETE'
+    }).then(response=>{
+        alert('User Has Been Removed From Group')
+        window.location.reload()
+    }).catch(err=>{
+        if(err.status === 500){
+            alert("Server Error, Error Code: " + err.status)
+        }else{
+            alert("An unexpected error occurred")
+        }
+        console.log(err)
+    })
+}
