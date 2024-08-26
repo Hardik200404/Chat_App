@@ -5,6 +5,7 @@ const sequelize = require('./util/database')
 const user_model = require('./models/user_model')
 const chat_model = require('./models/chat_model')
 const group_model = require('./models/group_model')
+const forgot_password_req_model = require('./models/forgot_password_req_model')
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.use(express.static(path.join(__dirname,'views')))
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('views/user_views'))
 
 require('./routes/user_routes')(app)
 require('./routes/chat_routes')(app)
@@ -34,6 +36,9 @@ group_model.belongsToMany(user_model,{
     foreignKey:'group_id',
     otherKey:'user_id'
 })
+
+user_model.hasMany(forgot_password_req_model)
+forgot_password_req_model.belongsTo(user_model)
 
 app.get('/',(req,res)=>{
     // console.log("hello")

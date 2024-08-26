@@ -1,6 +1,7 @@
 //importing controllers
-const { register, login, create_group, get_user, add_user, remove_user, update_group,
-     get_groups, get_members, check_admin, delete_group } = require('../controllers/user_controller')
+const { register, login, create_group, get_user, add_user, remove_user, 
+    update_group, get_groups, get_members, check_admin, delete_group, 
+    forgot_password, reset_password, reset_new_password } = require('../controllers/user_controller')
 
 //importing middleware
 const { verify_user } = require('../middlewares/user_auth')
@@ -16,5 +17,8 @@ module.exports = function(app){
     app.get('/check-admin', check_admin),
     app.delete('/remove-user', remove_user),
     app.delete('/delete-group', delete_group),
-    app.put('/update-group', update_group)
+    app.put('/update-group', update_group),
+    app.post('/password/forgot-password',forgot_password),
+    app.get('/password/reset-password/:uuid',reset_password),
+    app.post('/password/reset-new-password',reset_new_password)
 }

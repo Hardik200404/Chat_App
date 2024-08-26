@@ -119,3 +119,38 @@ function handle_create_group(event){
         console.error(err)
     })
 }
+
+function handle_forgot_password(event){
+    event.preventDefault()
+
+    axios.post('http://localhost:3000/password/forgot-password',{
+        email: event.target.email.value
+    })
+    .then(response=>{
+        //console.log(response)
+        alert('Reset Password Mail Sent')
+    }).catch(err=>{
+        console.log(err)
+    })
+}
+
+function handle_reset_password(event){
+    event.preventDefault()
+
+    if(event.target.new_password.value!=event.target.confirm_password.value){
+        return alert('Password Did Not Match')
+    }
+
+    axios.post('http://localhost:3000/password/reset-new-password',{
+        userId: event.target.userId.value,
+        new_password: event.target.new_password.value
+    })
+    .then(response=>{
+        //console.log(response)
+        alert('Password Reset Successful')
+        let reset_div = document.getElementById('reset_div')
+        reset_div.innerHTML = 'Password Updated Successfully'
+    }).catch(err=>{
+        console.log(err)
+    })
+}
