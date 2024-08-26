@@ -1,7 +1,7 @@
 const { register_service, login_service, add_user_service, update_group_service,
-    create_group_service, get_user_service, remove_user_service,
+    create_group_service, get_user_service, remove_user_service, forgot_password_service,
      get_groups_service, get_members_service, delete_group_service, 
-     check_admin_service} = require('../services/user_service')
+     check_admin_service, reset_password_service, reset_new_password_service } = require('../services/user_service')
 const { generate_jwt_token, verify_jwt_token } = require('../util/jwt')
 const bcrypt = require('bcrypt')
 
@@ -148,5 +148,48 @@ async function update_group(req,res){
         res.status(201).send(JSON.stringify(response))
     }
 }
+
+async function forgot_password(req,res){
+    let response = await forgot_password_service(req.body.email)
+
+    if(response.error){
+        res.status(500).send(response)
+    }else{
+        res.status(200).send(response)
+    }
+}
+
+async function reset_password(req,res){
+    let uuid = req.params.uuid
+    let response = await reset_password_service(uuid)
+
+    if(response==null){
+        res.status(404).send({error: 'Link Does Not Exist'})
+    }
+    else if(response.error){
+        res.status(500).send(response)
+    }else{
+        if(response.dataValues.is_active){
+            res.redirect(`/reset_password.html?userId=${response.dataValues.userId}`)
+        }else{
+            res.status(410).send({error: 'Link Expired'})
+        }
+    }
+}
+
+async function reset_new_password(req,res){
+    let new_password = bcrypt.hashSync(req.body.new_password,8)
+    let userId = req.body.userId
+    
+    let response = await reset_new_password_service(new_password,userId)
+
+    if(response.error){
+        res.status(500).send(response)
+    }else{
+        res.status(204).send(response)
+    }
+}
 module.exports = { register, login, create_group, get_groups, update_group,
-    get_members, get_user, add_user, check_admin, remove_user, delete_group }
+    get_members, get_user, add_user, check_admin, remove_user, delete_group,
+    forgot_password, reset_password, reset_new_password
+}
