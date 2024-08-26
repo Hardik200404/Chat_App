@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const edit_group_form = document.getElementById('edit-group-form')
     const search_form = document.getElementById('search-form')
     const search_query = document.getElementById('search-query')
-    const user_list = document.getElementById('user-list')
-    const members_list = document.getElementById('members-list')
     
     // Initial display of existing members
     display_existing_members()
@@ -52,6 +50,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         
         // Create an "Add" button
         const add_btn = document.createElement('button')
+        add_btn.id = 'add-btn'
         add_btn.textContent = 'Add'
         add_btn.onclick = () => add_user_to_group(user)
 
@@ -83,7 +82,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
             }
         }).then(data=>{
             // console.log(data)
-            user_list.innerHTML = '' // Clear result
+            const search_result_span = document.getElementById('search-result')
+            search_result_span.innerHTML = '' // Clear result
+            const add_btn = document.getElementById('add-btn')
+            add_btn.remove()
+
             // Show updated members list
             display_existing_members()
         }).catch(err=>{
@@ -228,6 +231,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 })
 
 function remove_user(userId){
+    const group_details = JSON.parse(localStorage.getItem('group_details'))
+    
     fetch(`http://localhost:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
         method: 'DELETE'
     }).then(response=>{
