@@ -16,8 +16,8 @@
             <div class="chat-container" id="chat-container"></div>
             <div class="form-container" id="form-container">
                 <form id="message-form">
-                    <input id="input_message" type="text" placeholder="message">
-                    <button type="submit"><i class="fa-solid fa-arrow-right" style="padding: 6px 15px; font-size: 24px"></i></button>
+                    <input id="input_message" name="message" type="text" placeholder="message">
+                    <button type="submit" onsubmit="handle_message_submit(event)"><i class="fa-solid fa-arrow-right" style="padding: 6px 15px; font-size: 24px"></i></button>
                 </form>
             </div>
         </div>
