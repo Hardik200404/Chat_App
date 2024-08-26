@@ -14,9 +14,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const chat_form_container = document.getElementById('chat-form-container')
         const group_info_container = document.getElementById('group-info-container')
         
-        const h2_group_name = document.createElement('h2')
-        h2_group_name.innerHTML = group_details.group_name
-        group_info_container.prepend(h2_group_name)
+        const span_group_name = document.createElement('span')
+        span_group_name.id = 'group_name_span'
+        span_group_name.style.setProperty('font-size', 'x-large')
+        span_group_name.innerHTML = group_details.group_name
+        group_info_container.prepend(span_group_name)
 
         // Check if user is admin
         fetch(`http://localhost:3000/check-admin?groupId=${group_details.id}&userId=${localStorage.getItem('token')}`,{
@@ -34,13 +36,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
             // console.log(data)
             if(data.admin){
                 // Show user as Admin
-                const p_admin = document.createElement('p')
-                p_admin.innerHTML = 'You Are The Admin'+ String.fromCodePoint(0x26A1)
-                chat_form_container.prepend(p_admin)
+                const span_admin = document.createElement('span')
+                span_admin.style.setProperty('font-size', 'xx-small')
+                span_admin.innerHTML = `You Are The Admin` + String.fromCodePoint(0x26A1)
+                chat_form_container.prepend(span_admin)
             }
             // Show group info button
             const grp_info_btn = document.createElement('button')
-            grp_info_btn.innerHTML = `Group Info` + `<i class="fa-solid fa-circle-info"></i>`
+            grp_info_btn.id = 'group_info_btn'
+            grp_info_btn.style.setProperty('background-color','#9ec6c0')
+            grp_info_btn.innerHTML = `Group Info` + `<i class="fa-solid fa-circle-info" style="padding-left: 2px"></i>`
             grp_info_btn.onclick = () => window.location.href = '../user_views/group_info.html'
             group_info_container.appendChild(grp_info_btn)
         }).catch(err=>{
@@ -56,29 +61,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         form.addEventListener('submit', handle_message_submit)
         fetch_messages()
 
-        document.getElementById('prev-btn').addEventListener('click', ()=>{
-            if (window.current_page < window.total_pages) {
-                window.current_page++
-                fetch_messages()
-            }
-        })
-    
-        document.getElementById('next-btn').addEventListener('click', ()=>{
-            if (window.current_page > 1){
-                window.current_page--
-                fetch_messages()
-            }
-        })
     }else{
         const chat_container = document.getElementById('chat-container')
         const form_container = document.getElementById('form-container')
         chat_container.innerHTML = 'Select a group'
         form_container.innerHTML = ''
     }
-
-    document.getElementById('add-grp-btn').addEventListener('click', ()=>{
-        window.location.href = '../user_views/add_group.html'
-    })
 })
 
 function fetch_groups(){
@@ -108,12 +96,30 @@ function fetch_groups(){
 }
 
 function display_groups(groups){
-    const group_list = document.getElementById('group-list')
+    const group_list = document.getElementById('group-container')
     group_list.innerHTML = ''
+
+    const my_groups = document.createElement('span')
+    my_groups.innerHTML = 'My Groups'
+    my_groups.style.setProperty('color', 'white')
+    my_groups.style.setProperty('font-size', 'x-large')
+    my_groups.style.setProperty('margin-bottom', '10px')
+    group_list.appendChild(my_groups)
+
+    const add_group_btn = document.createElement('button')
+    add_group_btn.id = 'add-grp-btn'
+    add_group_btn.innerHTML = `New Group  ` + `<i class="fa-solid fa-plus"></i>`
+    group_list.appendChild(add_group_btn)
+
+    document.getElementById('add-grp-btn').addEventListener('click', ()=>{
+        window.location.href = '../user_views/add_group.html'
+    })
 
     if(groups.length>0){
         groups.forEach((group)=>{
             const group_btn = document.createElement('button')
+            group_btn.className = 'group-btns'
+            group_btn.style.setProperty('height', '40px')
             group_btn.id = group.id
             group_btn.textContent = group.name
             group_btn.addEventListener('click', function() {
@@ -164,28 +170,55 @@ function display_messages(messages){
     const chat_container = document.getElementById('chat-container')
     chat_container.innerHTML = '' // Clear existing messages
 
+    const pagination_div = document.createElement('div')
+    pagination_div.className = 'pagination'
+
+    const prev_btn = document.createElement('button')
+    prev_btn.id = 'prev-btn'
+    prev_btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i>`
+
+    const next_btn = document.createElement('button')
+    next_btn.id = 'next-btn'
+    next_btn.innerHTML = `<i class="fa-solid fa-chevron-down"></i>`
+
+    pagination_div.appendChild(prev_btn)
+    pagination_div.appendChild(next_btn)
+    chat_container.appendChild(pagination_div)
+
+    document.getElementById('prev-btn').addEventListener('click', ()=>{
+        if (window.current_page < window.total_pages) {
+            window.current_page++
+            fetch_messages()
+        }
+    })
+
+    document.getElementById('next-btn').addEventListener('click', ()=>{
+        if (window.current_page > 1){
+            window.current_page--
+            fetch_messages()
+        }
+    })
+
     if(messages.length>0){
         //showing day, date and year on top
-        const h4_date = document.createElement('h4')
+        const span_date = document.createElement('span')
+        span_date.id = 'date'
         const date = messages[0].created_at.slice(0, messages[0].created_at.length - 6)
-        h4_date.innerHTML = date
+        span_date.innerHTML = date
         
-        chat_container.appendChild(h4_date)
-    
-        const message_table = document.createElement('table')
-        message_table.id = 'messages-table'
+        chat_container.appendChild(span_date)
     
         messages.forEach(message=>{
             const time = message.created_at.slice(-5)//extracting only time
-            const row = document.createElement('tr')
-            row.innerHTML = `
-                    <td>${message.username + ": "}</td>
-                    <td>${message.message}</td>
-                    <td>${time}</td>
+            const message_div = document.createElement('div')
+            message_div.id = 'message'
+            message_div.innerHTML = `
+                    <span class="username">${message.username}: </span>
+                    <span class="text">${message.message}</span>
+                    <span class="timestamp">${time}</span>
                 `
-            message_table.appendChild(row)
+            chat_container.appendChild(message_div)
         })
-        chat_container.appendChild(message_table)
     }else{
         chat_container.innerHTML = 'No Messages, Try Typing Something'
     }

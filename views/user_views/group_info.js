@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const grp_edit_div = document.getElementById('group-edit-container')
     const grp_name = document.getElementById('group-name-container')
     const grp_desc = document.getElementById('group-desc-container')
-    const members_list = document.getElementById('members-list')
+    // const members_list = document.getElementById('members-list')
+    const tbody = document.querySelector('#members-list tbody')
+    tbody.innerHTML = '' // Clear table
 
     const group_details = JSON.parse(localStorage.getItem('group_details'))
     const adminId = group_details.admin
@@ -57,7 +59,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         console.log(err)
     })
 
-    members_list.innerHTML = '' // Clear previous members
     fetch(`http://localhost:3000/get-members?groupId=${groupId}`,{
         method: 'GET'
     }).then(response=>{
@@ -72,13 +73,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }).then(existing_members=>{
         // console.log(data)
         existing_members.forEach(member=>{
-            const li = document.createElement('li')
+            const row = document.createElement('tr')
             if(member.id == adminId){
-                li.textContent = member.username + ' ( ' +member.phone + ' ) ' + String.fromCodePoint(0x1F451)
+                row.innerHTML = `
+                    <td>${member.username + String.fromCodePoint(0x1F451)}</td>
+                    <td>${member.phone}</td>
+                    <td><i class="fa-solid fa-champagne-glasses"></i></td>
+                `
             }else{
-                li.textContent = member.username + ' ( ' +member.phone + ' )'
+                row.innerHTML = `
+                    <td>${member.username}</td>
+                    <td>${member.phone}</td>
+                    <td>
+                        <button class="delete-btn" title="Remove" style="background-color: darkred" onclick=remove_user(${member.id})><i class="fa-solid fa-xmark"></i></button>
+                    </td>
+                `
             }
-            members_list.appendChild(li)
+            tbody.appendChild(row)
         })
     }).catch(err=>{
         if(err.status === 500){

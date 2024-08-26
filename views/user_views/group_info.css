@@ -1,0 +1,24 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Container takes full viewport height */
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #c2e7da;
+}
+
+table {
+    width: 100%;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 8px;
+}
+th {
+    background-color: #9ec6c0;
+}

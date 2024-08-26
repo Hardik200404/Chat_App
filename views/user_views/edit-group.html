@@ -4,40 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Group</title>
+    <link rel="stylesheet" href="edit-group.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="group-info-container" id="group-info-container">
-        <form id="edit-group-form">
-            <label for="group-name-input">Group Name</label>
-            <input type="text" id="group-name-input" name="group-name-input">
-            <label for="group-desc-input">Group Description</label>
-            <input type="text" id="group-desc-input" name="group-desc-input">
-            <button type="submit">Save</button>
-        </form>
+    <div class="container">
+        <div class="edit-group-info-and-search-containers">
+            <div class="edit-group-info-container">
+                <form id="edit-group-form">
+                    <label for="group-name-input">Group Name</label>
+                    <input type="text" id="group-name-input" name="group-name-input">
+                    <label for="group-desc-input">Group Description</label>
+                    <input type="text" id="group-desc-input" name="group-desc-input">
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+            <!-- Search Section -->
+            <div class="parent-search-container">
+                <div class="search-container">
+                    <form id="search-form">
+                        <label for="search-query">Search Users</label>
+                        <input type="text" id="search-query" placeholder="Enter email or phone number">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                <!-- Search Results Section -->
+                <div class="search-results-container" id="search-results-container">
+                    <span id="search-result"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Existing Members Section -->
+        <div class="existing-members-container" id="existing-members">
+            <span style="font-size: large;">Existing Members</span>
+            <table id="members-list">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
     </div>
-    
-    <!-- Search Section -->
-    <div>
-        <h4>Search Users</h4>
-        <form id="search-form">
-            <input type="text" id="search-query" placeholder="Enter email or phone number">
-            <button type="submit">Search</button>
-        </form>
-    </div>
-
-    <!-- Search Results Section -->
-    <div id="search-results">
-        <h4>Search Results</h4>
-        <ul id="user-list"></ul>
-    </div>
-
-    <!-- Existing Members Section -->
-    <div id="existing-members">
-        <h4>Existing Members</h4>
-        <ul id="members-list"></ul>
-    </div>
-
     <script src="edit-group.js"></script>
 </body>
 </html>

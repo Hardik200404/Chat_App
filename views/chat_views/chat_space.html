@@ -8,23 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="parent-container">
-    <div class="pagination">
-        <button id="prev-btn"><i class="fa-solid fa-angles-up"></i></button>
-        <button id="next-btn"><i class="fa-solid fa-angles-down"></i></button>
-    </div>
     <div class="child-container">
-        <div class="group-container">
-            <h4>Groups <i class="fa-solid fa-user-group"></i></h4>
-            <button id="add-grp-btn"><i class="fa-solid fa-plus"></i></button>
-            <nav class="group-list-container" id="group-list"></nav>
+        <div class="group-container" id="group-container">
         </div>
         <div class="chat-form-container" id="chat-form-container">
             <div class="group-info-container" id="group-info-container"></div>
             <div class="chat-container" id="chat-container"></div>
             <div class="form-container" id="form-container">
                 <form id="message-form">
-                    <input id="message" type="text" placeholder="message">
-                    <button type="submit">Send</button>
+                    <input id="input_message" type="text" placeholder="message">
+                    <button type="submit"><i class="fa-solid fa-arrow-right" style="padding: 6px 15px; font-size: 24px"></i></button>
                 </form>
             </div>
         </div>

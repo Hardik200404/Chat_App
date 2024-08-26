@@ -47,18 +47,16 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     // Function to display users in the search results
     function display_search_results(user){
-        user_list.innerHTML = '' // Clear previous results
-        
-        const li = document.createElement('li')
-        li.textContent = `${user.username} - ${user.email} - ${user.phone}`
+        const search_result_span = document.getElementById('search-result')
+        search_result_span.innerHTML = `${user.username} - ${user.email} - ${user.phone}`
         
         // Create an "Add" button
         const add_btn = document.createElement('button')
         add_btn.textContent = 'Add'
         add_btn.onclick = () => add_user_to_group(user)
-        
-        li.appendChild(add_btn)
-        user_list.appendChild(li)
+
+        const search_result_div = document.getElementById('search-results-container')
+        search_result_div.appendChild(add_btn)
     }
 
     // Function to add a user to the group
@@ -102,7 +100,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     // Function to display existing members
     function display_existing_members(){
-        members_list.innerHTML = '' // Clear previous members
+        const tbody = document.querySelector('#members-list tbody')
+        tbody.innerHTML = '' // Clear table
+
         const groupId = group_details.id
         fetch(`http://localhost:3000/get-members?groupId=${groupId}`,{
             method: 'GET'
@@ -118,19 +118,36 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }).then(existing_members=>{
             // console.log(data)
             existing_members.forEach(member=>{
-                const li = document.createElement('li')
-                
+                const row = document.createElement('tr')
                 if(member.id == adminId){
-                    li.textContent = member.username + ' ( ' +member.phone + ' ) ' + String.fromCodePoint(0x1F451)
+                    row.innerHTML = `
+                        <td>${member.username + String.fromCodePoint(0x1F451)}</td>
+                        <td>${member.phone}</td>
+                        <td><i class="fa-solid fa-champagne-glasses"></i></td>
+                    `
                 }else{
-                    li.textContent = member.username + ' ( ' +member.phone + ' )'
-                    
-                    const del_btn = document.createElement('button')
-                    del_btn.innerHTML = `<i class="fa-solid fa-xmark"></i>`
-                    del_btn.onclick = () => remove_user(member.id)
-                    li.appendChild(del_btn)
+                    row.innerHTML = `
+                        <td>${member.username}</td>
+                        <td>${member.phone}</td>
+                        <td>
+                            <button class="delete-btn" title="Remove" style="background-color: darkred" onclick=remove_user(${member.id})><i class="fa-solid fa-xmark"></i></button>
+                        </td>
+                    `
                 }
-                members_list.appendChild(li)
+                tbody.appendChild(row)
+                // const li = document.createElement('li')
+                
+                // if(member.id == adminId){
+                //     li.textContent =  + ' ( ' +member.phone + ' ) ' + 
+                // }else{
+                //     li.textContent = member.username + ' ( ' + + ' )'
+                    
+                //     const del_btn = document.createElement('button')
+                //     del_btn.innerHTML = ``
+                //     del_btn.onclick = () => 
+                //     li.appendChild(del_btn)
+                // }
+                // members_list.appendChild(li)
             })
         }).catch(err=>{
             if(err.status === 500){
@@ -160,19 +177,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 
     function remove_user(userId){
-        fetch(`http://localhost:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
-            method: 'DELETE'
-        }).then(response=>{
-            alert('User Has Been Removed From Group')
-            window.location.reload()
-        }).catch(err=>{
-            if(err.status === 500){
-                alert("Server Error, Error Code: " + err.status)
-            }else{
-                alert("An unexpected error occurred")
-            }
-            console.log(err)
-        })
+        console.log(userId, 'delete')
+        // fetch(`http://localhost:3000/remove-user?groupId=${group_details.id}&userId=${userId}`,{
+        //     method: 'DELETE'
+        // }).then(response=>{
+        //     alert('User Has Been Removed From Group')
+        //     window.location.reload()
+        // }).catch(err=>{
+        //     if(err.status === 500){
+        //         alert("Server Error, Error Code: " + err.status)
+        //     }else{
+        //         alert("An unexpected error occurred")
+        //     }
+        //     console.log(err)
+        // })
     }
     
     // Function to check if the query is an email or phone number
