@@ -5,6 +5,7 @@ const sequelize = require('./util/database')
 const user_model = require('./models/user_model')
 const chat_model = require('./models/chat_model')
 const group_model = require('./models/group_model')
+const forgot_password_req_model = require('./models/forgot_password_req_model')
 
 const app = express()
 
