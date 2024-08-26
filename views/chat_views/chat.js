@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
             if(data.admin){
                 // Show user as Admin
                 const span_admin = document.createElement('span')
-                span_admin.style.setProperty('font-size', 'xx-small')
-                span_admin.innerHTML = `You Are The Admin` + String.fromCodePoint(0x26A1)
+                span_admin.style.setProperty('font-size', 'x-small')
+                span_admin.innerHTML = `You Are Admin` + String.fromCodePoint(0x26A1)
                 chat_form_container.prepend(span_admin)
             }
             // Show group info button
@@ -260,6 +260,8 @@ function handle_message_submit(event){
         }
     }).then(data=>{
         // console.log(data)
+        const input_feild = document.getElementById('input_message')
+        input_feild.value = '' // Clear the text box
         fetch_messages()
     }).catch(err=>{
         if(err.status === 500){
