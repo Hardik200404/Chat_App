@@ -78,15 +78,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 row.innerHTML = `
                     <td>${member.username + String.fromCodePoint(0x1F451)}</td>
                     <td>${member.phone}</td>
-                    <td><i class="fa-solid fa-champagne-glasses"></i></td>
                 `
             }else{
                 row.innerHTML = `
                     <td>${member.username}</td>
                     <td>${member.phone}</td>
-                    <td>
-                        <button class="delete-btn" title="Remove" style="background-color: darkred" onclick=remove_user(${member.id})><i class="fa-solid fa-xmark"></i></button>
-                    </td>
                 `
             }
             tbody.appendChild(row)

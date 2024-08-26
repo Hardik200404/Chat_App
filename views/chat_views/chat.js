@@ -139,7 +139,9 @@ function display_groups(groups){
 }
 
 function fetch_messages(){
+    const chat_container = document.getElementById('chat-container')
     const group_details = JSON.parse(localStorage.getItem('group_details'))
+
     fetch(`http://13.233.233.15:3000/get-message?groupId=${group_details.id}&page=${window.current_page}&limit=10`,{
         method: 'GET'
     }).then(response=>{
@@ -154,8 +156,12 @@ function fetch_messages(){
     }).then(data=>{
         // console.log(data)
         window.total_pages = data.total_pages
-        display_messages(data.messages.reverse())
-        update_buttons()
+        if(data.messages.length > 0){
+            display_messages(data.messages.reverse())
+            update_buttons()
+        }else{
+            chat_container.innerHTML = 'No Messages, Try Typing Something'
+        }
     }).catch(err=>{
         if(err.status === 500){
             alert("Server Error, Error Code: " + err.status)
@@ -170,16 +176,16 @@ function display_messages(messages){
     const chat_container = document.getElementById('chat-container')
     chat_container.innerHTML = '' // Clear existing messages
 
-    const pagination_div = document.createElement('div')
-    pagination_div.className = 'pagination'
-
     const prev_btn = document.createElement('button')
     prev_btn.id = 'prev-btn'
     prev_btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i>`
-
+    
     const next_btn = document.createElement('button')
     next_btn.id = 'next-btn'
     next_btn.innerHTML = `<i class="fa-solid fa-chevron-down"></i>`
+
+    const pagination_div = document.createElement('div')
+    pagination_div.className = 'pagination'
 
     pagination_div.appendChild(prev_btn)
     pagination_div.appendChild(next_btn)
@@ -199,29 +205,25 @@ function display_messages(messages){
         }
     })
 
-    if(messages.length>0){
-        //showing day, date and year on top
-        const span_date = document.createElement('span')
-        span_date.id = 'date'
-        const date = messages[0].created_at.slice(0, messages[0].created_at.length - 6)
-        span_date.innerHTML = date
-        
-        chat_container.appendChild(span_date)
+    //showing day, date and year on top
+    const span_date = document.createElement('span')
+    span_date.id = 'date'
+    const date = messages[0].created_at.slice(0, messages[0].created_at.length - 6)
+    span_date.innerHTML = date
     
-        messages.forEach(message=>{
-            const time = message.created_at.slice(-5)//extracting only time
-            const message_div = document.createElement('div')
-            message_div.id = 'message'
-            message_div.innerHTML = `
-                    <span class="username">${message.username}: </span>
-                    <span class="text">${message.message}</span>
-                    <span class="timestamp">${time}</span>
-                `
-            chat_container.appendChild(message_div)
-        })
-    }else{
-        chat_container.innerHTML = 'No Messages, Try Typing Something'
-    }
+    chat_container.appendChild(span_date)
+
+    messages.forEach(message=>{
+        const time = message.created_at.slice(-5)//extracting only time
+        const message_div = document.createElement('div')
+        message_div.id = 'message'
+        message_div.innerHTML = `
+                <span class="username">${message.username}: </span>
+                <span class="text">${message.message}</span>
+                <span class="timestamp">${time}</span>
+            `
+        chat_container.appendChild(message_div)
+    })
 }
 
 function update_buttons() {
