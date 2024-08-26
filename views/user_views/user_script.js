@@ -123,7 +123,7 @@ function handle_create_group(event){
 function handle_forgot_password(event){
     event.preventDefault()
 
-    axios.post('http://localhost:3000/password/forgot-password',{
+    axios.post('http://13.233.233.15:3000/password/forgot-password',{
         email: event.target.email.value
     })
     .then(response=>{
@@ -141,7 +141,7 @@ function handle_reset_password(event){
         return alert('Password Did Not Match')
     }
 
-    axios.post('http://localhost:3000/password/reset-new-password',{
+    axios.post('http://13.233.233.15:3000/password/reset-new-password',{
         userId: event.target.userId.value,
         new_password: event.target.new_password.value
     })
