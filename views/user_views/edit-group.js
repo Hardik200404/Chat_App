@@ -3,6 +3,33 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const group_details = JSON.parse(localStorage.getItem('group_details'))
     const adminId = group_details.admin
     
+    // Check if user is admin
+    fetch(`http://localhost:3000/check-admin?groupId=${group_details.id}&userId=${localStorage.getItem('token')}`,{
+        method: 'GET'
+    }).then(response=>{
+        if(response.ok){
+            return response.json()
+        }else{
+            // Handle different response statuses
+            return response.json().then(error=>{
+                throw { status: response.status, ...error } // Throw an error with status code and message
+            })
+        }
+    }).then(data=>{
+        // console.log(data)
+        if(!data.admin){
+            alert('You Are Not The Admin For This Group')
+            window.location.href = 'group_info.html'
+        }
+    }).catch(err=>{
+        if(err.status === 500){
+            alert("Server Error, Error Code: " + err.status)
+        }else{
+            alert("An unexpected error occurred")
+        }
+        console.log(err)
+    })
+
     const edit_group_form = document.getElementById('edit-group-form')
     const search_form = document.getElementById('search-form')
     const search_query = document.getElementById('search-query')
