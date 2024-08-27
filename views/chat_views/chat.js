@@ -1,3 +1,26 @@
+// Initialize WebSocket connection
+const socket = new WebSocket('ws://13.233.233.15:3000')
+
+// Handle WebSocket events
+socket.addEventListener('open', ()=>{
+    console.log('WebSocket connection established')
+})
+
+socket.addEventListener('message', (event)=>{
+    // Handle incoming messages
+    setTimeout(()=>fetch_messages(), 2000)
+})
+
+// Handle WebSocket errors
+socket.addEventListener('error', (error)=>{
+    console.error('WebSocket Error:', error)
+})
+
+// Handle WebSocket close event
+socket.addEventListener('close', ()=>{
+    console.log('WebSocket connection closed')
+})
+
 // Initialize pagination
 window.current_page = 1
 window.total_pages = 1 // This will be updated once messages are fetched
@@ -240,6 +263,7 @@ function handle_message_submit(event){
                     groupId: JSON.parse(localStorage.getItem('group_details')).id 
                 }
     // console.log(message)
+    socket.send(JSON.stringify(message))
 
     fetch('http://13.233.233.15:3000/post-message',{
         method: 'POST',
