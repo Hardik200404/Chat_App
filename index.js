@@ -141,3 +141,17 @@ sequelize.sync()
     })
 })
 .catch(err => console.log(err))
+
+// Running the cronjob to delete messages every minute
+const cron = require('node-cron')
+
+cron.schedule('0 0 * * *', ()=>{
+    console.log('Running chat cleanup job...')
+    try{
+        sequelize.transaction(async(t)=>{
+            await chat_model.truncate()
+        })
+    }catch(err){
+        console.log('Error Deleting Chats', err)
+    }
+})
