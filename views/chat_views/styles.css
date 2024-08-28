@@ -141,6 +141,10 @@ body {
     margin-left: 5px;
 }
 
+#upload-file {
+    padding: 15px;
+}
+
 .form-container button:hover {
     background-color: #364b44;
 }

@@ -16,6 +16,8 @@
             <div class="chat-container" id="chat-container"></div>
             <div class="form-container" id="form-container">
                 <form id="message-form">
+                    <input id="file_input" type="file" style="display: none" accept="image/*,video/*,audio/*">
+                    <button type="button" id="upload-file"><i class="fa-solid fa-file-arrow-up"></i></button>
                     <input id="input_message" name="message" type="text" placeholder="message">
                     <button type="submit" onsubmit="handle_message_submit(event)"><i class="fa-solid fa-arrow-right" style="padding: 6px 15px; font-size: 24px"></i></button>
                 </form>

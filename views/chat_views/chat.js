@@ -240,11 +240,22 @@ function display_messages(messages){
         const time = message.created_at.slice(-5)//extracting only time
         const message_div = document.createElement('div')
         message_div.id = 'message'
-        message_div.innerHTML = `
+
+        // Check if it's a URL
+        if(is_s3_url(message.message)){
+            const media_type = get_media_type(message.message)
+            message_div.innerHTML = `
+                <span class="username">${message.username}: </span>
+                <span class="text"><a href=${message.message} rel="noopener noreferrer" target="_blank">${media_type}</a></span>
+                <span class="timestamp">${time}</span>
+            `
+        }else{
+            message_div.innerHTML = `
                 <span class="username">${message.username}: </span>
                 <span class="text">${message.message}</span>
                 <span class="timestamp">${time}</span>
             `
+        }
         chat_container.appendChild(message_div)
     })
 }
@@ -299,4 +310,76 @@ function handle_message_submit(event){
 
     //clear the text box
     document.getElementById('message').value = ''
+}
+
+function is_s3_url(message){
+    // Regex pattern to match S3 URLs
+    const s3_url_pattern = /^https:\/\/s3\.[a-z0-9.-]+\.amazonaws\.com\/.+/
+    
+    // Check if the message matches the S3 URL pattern
+    return s3_url_pattern.test(message)
+}
+
+function get_media_type(url){
+    const extension = url.split('.').pop().toLowerCase()
+    if(['jpg', 'jpeg', 'png', 'gif'].includes(extension)){
+      return 'image'
+    }else if (['mp4', 'webm', 'ogg'].includes(extension)){
+      return 'video'
+    }else if (['mp3', 'wav', 'ogg'].includes(extension)){
+      return 'audio'
+    }
+    return 'unknown'
+}
+
+document.getElementById('upload-file').addEventListener('click', function(){
+    document.getElementById('file_input').click()
+})
+
+// checking for file upload
+const file_input = document.getElementById('file_input')
+file_input.addEventListener('change', handle_file_change)
+
+function handle_file_change(){
+    if(file_input.files.length > 0){
+        const file = file_input.files[0]
+        upload_file(file)
+        .then(file_url=>{
+            socket.send(JSON.stringify({ file_url: file_url }))
+        })
+        .catch(err => console.error('Error uploading file:', err))
+    }
+}
+
+function upload_file(file){
+    const groupId = JSON.parse(localStorage.getItem('group_details')).id 
+    const form_data = new FormData()
+    form_data.append('file', file)
+
+    return fetch(`http://localhost:3000/upload-file?groupId=${groupId}`, {
+        method: 'POST',
+        headers: {
+            'Authorization': localStorage.getItem('token')
+        },
+        body: form_data
+    }).then(response=>{
+        // Check if response status is successful
+        if(response.ok){
+            return response.json() // Parse JSON response
+        }else{
+            // Handle different response statuses
+            return response.json().then(error=>{
+                throw { status: response.status, ...error } // Throw an error with status code and message
+            })
+        }
+    }).then(data=>{
+        fetch_messages()
+    }).catch(err=>{
+        if(err.status === 500){
+            alert("Server Error, Error Code: " + err.status)
+        }else{
+            alert("An unexpected error occurred")
+        }
+        console.log(err)
+    })
 }

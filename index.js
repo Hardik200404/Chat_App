@@ -23,6 +23,67 @@ const server = http.createServer(app)
 // Set up WebSocket server
 const wss = new WebSocket.Server({ server })
 
+const multer = require('multer')
+const AWS = require('aws-sdk')
+const fs = require('fs')
+const { verify_jwt_token } = require('./util/jwt')
+const get_date_time = require('./util/date_time_now')
+const { post_message_service } = require('./services/chat_service')
+require('dotenv').config()
+
+// Configure multer for file uploads
+const upload = multer({ dest: 'uploads/' }) // Temporarily save files to 'uploads/' folder
+
+// Configure AWS S3
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_ACCESS_SECRET_KEY,
+})
+
+app.post('/upload-file', upload.single('file'), (req, res) => {
+    const userId = verify_jwt_token(req.headers.authorization)
+    const file = req.file
+    if (!file) {
+        return res.status(400).send({ error : 'No file uploaded.'})
+    }
+
+    // Upload to S3
+    const fileStream = fs.createReadStream(file.path)
+    const uploadParams = {
+        Bucket: process.env.BUCKET,
+        Body: fileStream,
+        Key: file.originalname // or a unique key for each file
+    }
+
+    s3.upload(uploadParams, async (err, data) => {
+        if (err) {
+            console.error('Error uploading file:', err)
+            return res.status(500).send('Error uploading file.')
+        }
+
+        // Remove the file from local storage after upload
+        fs.unlinkSync(file.path)
+
+        const date_time = get_date_time()
+
+        const data_to_insert = {
+            message: data.Location,
+            username: null,
+            created_at: date_time,
+            userId: userId,
+            groupId: req.query.groupId
+        }
+
+        // Store the url in db
+        const result = await post_message_service(data_to_insert)
+        if(result){
+            res.status(201).send(JSON.stringify(result))
+        }else{
+            res.status(500).send(JSON.stringify(result.error))
+        }
+    })
+})
+
 wss.on('connection', (ws)=>{
     console.log('A user connected')
 
